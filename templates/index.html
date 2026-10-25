@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Insurance Recommender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* মডার্ন ডার্ক গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+            background: linear-gradient(135deg, #0f172a, #1e293b, #0f2027);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        /* অ্যাপল গ্লাস ইফেক্ট */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        /* হোভার ইফেক্ট */
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(0, 242, 254, 0.15);
+        }
+        /* ইনপুট ফিল্ডের গ্লাস ডিজাইন */
+        .form-control, .form-select {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #00f2fe;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+        /* ড্রপডাউনের অপশন ডার্ক রাখা */
+        .form-select option {
+            background: #1e293b;
+            color: #fff;
+        }
+        /* বাটনের গ্লোয়িং ইফেক্ট */
+        .btn-glass {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .btn-glass:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5);
+            color: white;
+        }
+        label {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- ইউজার নেম এবং লগআউট অপশন -->
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-9 col-lg-8 text-end">
+                <span class="me-3 text-light opacity-75">Hello, <b style="color: #00f2fe;">{{ request.user.username }}</b>!</span>
+                <a href="{% url 'logout_user' %}" class="btn btn-sm btn-outline-danger" style="border-radius: 8px;">Logout</a>
+            </div>
+        </div>
+
+        <!-- মূল ইনপুট ফর্ম কার্ড -->
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-8">
+                <div class="glass-card p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold" style="color: #00f2fe;">AI Insurance Agent</h2>
+                        <p class="text-light opacity-75">Smart predictions based on your lifestyle</p>
+                    </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label>Age</label>
+                                <input type="number" name="age" class="form-control" min="1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Annual Income (BDT)</label>
+                                <input type="number" name="income" class="form-control" min="0" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label>Dependents (Family Members)</label>
+                                <input type="number" name="dependents" class="form-control" value="0" min="0" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Daily Driving (KM)</label>
+                                <input type="number" name="driving_km" class="form-control" min="0" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label>Past Accidents</label>
+                                <input type="number" name="accidents" class="form-control" value="0" min="0" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Smoking Habit</label>
+                                <select name="smoking" class="form-select">
+                                    <option value="No">No</option>
+                                    <option value="Sometimes">Sometimes</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label>Physical Fitness</label>
+                                <select name="fitness" class="form-select">
+                                    <option value="Good">Good</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Poor">Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Late Night Driving</label>
+                                <select name="late_night" class="form-select">
+                                    <option value="No">No</option>
+                                    <option value="Sometimes">Sometimes</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-glass w-100 py-3 fs-5 mt-2">Get AI Recommendation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ইউজারের হিস্ট্রি সেকশন -->
+        {% if history %}
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-10">
+                <div class="glass-card p-4">
+                    <h4 class="text-info fw-bold mb-3">Your Prediction History</h4>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover table-borderless align-middle" style="background: transparent;">
+                            <thead style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                <tr class="text-light opacity-75">
+                                    <th>Date</th>
+                                    <th>Age</th>
+                                    <th>Income</th>
+                                    <th>Risk Score</th>
+                                    <th>Recommended Policy</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in history %}
+                                <tr>
+                                    <td>{{ item.date_saved|date:"d M, Y" }}</td>
+                                    <td>{{ item.age }}</td>
+                                    <td>৳ {{ item.income }}</td>
+                                    <td>
+                                        <span class="badge {% if item.risk_score > 70 %}bg-danger{% elif item.risk_score > 40 %}bg-warning{% else %}bg-success{% endif %}">
+                                            {{ item.risk_score }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold" style="color: #00f2fe;">{{ item.recommended_policy }}</td>
+                                    <td>
+                                        <!-- View বাটন যুক্ত করা হলো -->
+                                        <a href="{% url 'view_history' item.id %}" class="btn btn-sm btn-outline-info me-1">View</a>
+                                        <a href="{% url 'delete_history' item.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

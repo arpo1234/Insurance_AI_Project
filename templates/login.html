@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - AI Insurance Recommender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #0f172a, #1e293b, #0f2027); color: #ffffff; min-height: 100vh; display: flex; align-items: center; font-family: -apple-system, sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: transform 0.4s ease; }
+        .glass-card:hover { transform: translateY(-5px); }
+        .form-control { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; border-radius: 12px; }
+        .form-control:focus { background: rgba(255, 255, 255, 0.15); border-color: #00f2fe; color: #fff; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .btn-glass { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; color: white; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;}
+        .btn-glass:hover { box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5); color: white; transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="glass-card p-5">
+                    <h3 class="text-center fw-bold mb-4" style="color: #00f2fe;">Welcome Back</h3>
+                    
+                    {% if error %} 
+                        <div class="alert alert-danger text-center" style="background: rgba(220,53,69,0.2); color: #ff6b6b; border: 1px solid rgba(220,53,69,0.4);">{{ error }}</div> 
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label text-light opacity-75">Username</label>
+                            <input type="text" name="username" class="form-control py-2" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-light opacity-75">Password</label>
+                            <input type="password" name="password" class="form-control py-2" required>
+                        </div>
+                        <button type="submit" class="btn btn-glass w-100 py-2 fs-5">Login</button>
+                    </form>
+                    <p class="text-center mt-4 text-light opacity-75">Don't have an account? <a href="{% url 'register_page' %}" style="color: #00f2fe; text-decoration: none; font-weight: bold;">Register Here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
